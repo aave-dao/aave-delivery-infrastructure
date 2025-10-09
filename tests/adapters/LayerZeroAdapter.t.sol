@@ -17,7 +17,8 @@ contract LayerZeroAdapterTest is BaseAdapterTest {
     address lzEndpoint,
     address originForwarder,
     uint256 baseGasLimit,
-    uint256 originChainId
+    uint256 originChainId,
+    address delegate
   ) {
     vm.assume(crossChainController != tx.origin); // zkVM doesn't support mocking tx.origin
     vm.assume(baseGasLimit < 1 ether);
@@ -34,11 +35,17 @@ contract LayerZeroAdapterTest is BaseAdapterTest {
       memory originConfigs = new IBaseAdapter.TrustedRemotesConfig[](1);
     originConfigs[0] = originConfig;
 
+    vm.mockCall(
+      lzEndpoint,
+      abi.encodeWithSelector(ILayerZeroEndpointV2.setDelegate.selector),
+      abi.encode()
+    );
     layerZeroAdapter = new LayerZeroAdapter(
       crossChainController,
       lzEndpoint,
       baseGasLimit,
-      originConfigs
+      originConfigs,
+      delegate
     );
     _;
   }
@@ -49,7 +56,8 @@ contract LayerZeroAdapterTest is BaseAdapterTest {
     address crossChainController,
     uint256 baseGasLimit,
     address originForwarder,
-    uint256 originChainId
+    uint256 originChainId,
+    address delegate
   ) public {
     vm.assume(crossChainController != address(0));
     vm.assume(originForwarder != address(0));
@@ -64,7 +72,7 @@ contract LayerZeroAdapterTest is BaseAdapterTest {
     originConfigs[0] = originConfig;
 
     vm.expectRevert(bytes(Errors.INVALID_LZ_ENDPOINT));
-    new LayerZeroAdapter(crossChainController, address(0), baseGasLimit, originConfigs);
+    new LayerZeroAdapter(crossChainController, address(0), baseGasLimit, originConfigs, delegate);
   }
 
   function testInit(
@@ -72,10 +80,11 @@ contract LayerZeroAdapterTest is BaseAdapterTest {
     address lzEndpoint,
     address originForwarder,
     uint256 baseGasLimit,
-    uint256 originChainId
+    uint256 originChainId,
+    address delegate
   )
     public
-    setLZAdapter(crossChainController, lzEndpoint, originForwarder, baseGasLimit, originChainId)
+    setLZAdapter(crossChainController, lzEndpoint, originForwarder, baseGasLimit, originChainId, delegate)
   {
     assertEq(
       keccak256(abi.encode(layerZeroAdapter.adapterName())),
@@ -90,10 +99,11 @@ contract LayerZeroAdapterTest is BaseAdapterTest {
     address lzEndpoint,
     address originForwarder,
     uint256 baseGasLimit,
-    uint256 originChainId
+    uint256 originChainId,
+    address delegate
   )
     public
-    setLZAdapter(crossChainController, lzEndpoint, originForwarder, baseGasLimit, originChainId)
+    setLZAdapter(crossChainController, lzEndpoint, originForwarder, baseGasLimit, originChainId, delegate)
   {
     assertEq(layerZeroAdapter.nativeToInfraChainId(30109), ChainIds.POLYGON);
   }
@@ -103,10 +113,11 @@ contract LayerZeroAdapterTest is BaseAdapterTest {
     address lzEndpoint,
     address originForwarder,
     uint256 baseGasLimit,
-    uint256 originChainId
+    uint256 originChainId,
+    address delegate
   )
     public
-    setLZAdapter(crossChainController, lzEndpoint, originForwarder, baseGasLimit, originChainId)
+    setLZAdapter(crossChainController, lzEndpoint, originForwarder, baseGasLimit, originChainId, delegate)
   {
     assertEq(layerZeroAdapter.infraToNativeChainId(ChainIds.POLYGON), 30109);
   }
@@ -115,10 +126,11 @@ contract LayerZeroAdapterTest is BaseAdapterTest {
     address crossChainController,
     address lzEndpoint,
     address originForwarder,
-    uint256 baseGasLimit
+    uint256 baseGasLimit,
+    address delegate
   )
     public
-    setLZAdapter(crossChainController, lzEndpoint, originForwarder, baseGasLimit, ChainIds.ETHEREUM)
+    setLZAdapter(crossChainController, lzEndpoint, originForwarder, baseGasLimit, ChainIds.ETHEREUM, delegate)
   {
     bytes memory payload = abi.encode('test message');
 
@@ -152,10 +164,11 @@ contract LayerZeroAdapterTest is BaseAdapterTest {
     address lzEndpoint,
     address originForwarder,
     uint256 baseGasLimit,
-    address caller
+    address caller,
+    address delegate
   )
     public
-    setLZAdapter(crossChainController, lzEndpoint, originForwarder, baseGasLimit, ChainIds.ETHEREUM)
+    setLZAdapter(crossChainController, lzEndpoint, originForwarder, baseGasLimit, ChainIds.ETHEREUM, delegate)
   {
     Origin memory origin = Origin({
       srcEid: uint32(30101),
@@ -175,10 +188,11 @@ contract LayerZeroAdapterTest is BaseAdapterTest {
     address lzEndpoint,
     address originForwarder,
     uint256 baseGasLimit,
-    address srcAddress
+    address srcAddress,
+    address delegate
   )
     public
-    setLZAdapter(crossChainController, lzEndpoint, originForwarder, baseGasLimit, ChainIds.ETHEREUM)
+    setLZAdapter(crossChainController, lzEndpoint, originForwarder, baseGasLimit, ChainIds.ETHEREUM, delegate)
   {
     vm.assume(srcAddress != originForwarder);
 
@@ -201,10 +215,11 @@ contract LayerZeroAdapterTest is BaseAdapterTest {
     uint256 baseGasLimit,
     uint256 dstGasLimit,
     address receiver,
-    address caller
+    address caller,
+    address delegate
   )
     public
-    setLZAdapter(crossChainController, lzEndpoint, originForwarder, baseGasLimit, ChainIds.ETHEREUM)
+    setLZAdapter(crossChainController, lzEndpoint, originForwarder, baseGasLimit, ChainIds.ETHEREUM, delegate)
   {
     vm.assume(dstGasLimit < 1 ether);
     vm.assume(receiver != address(0));
@@ -219,10 +234,11 @@ contract LayerZeroAdapterTest is BaseAdapterTest {
     address originForwarder,
     uint256 baseGasLimit,
     uint256 dstGasLimit,
-    address receiver
+    address receiver,
+    address delegate
   )
     public
-    setLZAdapter(crossChainController, lzEndpoint, originForwarder, baseGasLimit, ChainIds.ETHEREUM)
+    setLZAdapter(crossChainController, lzEndpoint, originForwarder, baseGasLimit, ChainIds.ETHEREUM, delegate)
   {
     vm.assume(dstGasLimit > 200000 && dstGasLimit < 1 ether);
     vm.assume(receiver != address(0));
@@ -253,10 +269,11 @@ contract LayerZeroAdapterTest is BaseAdapterTest {
     address originForwarder,
     uint256 baseGasLimit,
     uint256 dstGasLimit,
-    address receiver
+    address receiver,
+    address delegate
   )
     public
-    setLZAdapter(crossChainController, lzEndpoint, originForwarder, baseGasLimit, ChainIds.ETHEREUM)
+    setLZAdapter(crossChainController, lzEndpoint, originForwarder, baseGasLimit, ChainIds.ETHEREUM, delegate)
   {
     vm.assume(receiver != address(0));
     vm.assume(dstGasLimit > 200000 && dstGasLimit < 1 ether);
@@ -272,10 +289,11 @@ contract LayerZeroAdapterTest is BaseAdapterTest {
     address lzEndpoint,
     address originForwarder,
     uint256 baseGasLimit,
-    uint256 dstGasLimit
+    uint256 dstGasLimit,
+    address delegate
   )
     public
-    setLZAdapter(crossChainController, lzEndpoint, originForwarder, baseGasLimit, ChainIds.ETHEREUM)
+    setLZAdapter(crossChainController, lzEndpoint, originForwarder, baseGasLimit, ChainIds.ETHEREUM, delegate)
   {
     vm.assume(dstGasLimit > 200000 && dstGasLimit < 1 ether);
 
