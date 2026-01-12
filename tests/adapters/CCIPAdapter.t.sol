@@ -121,14 +121,16 @@ contract CCIPAdapterTest is Test {
     uint40 payloadId = uint40(0);
     bytes memory payload = abi.encode(payloadId, CROSS_CHAIN_CONTROLLER);
 
+    // Set LINK balance to 0 so the adapter cannot pay fees
+    deal(address(LINK_TOKEN), address(this), 0);
+
     vm.mockCall(
       CCIP_ROUTER,
       abi.encodeWithSelector(IRouterClient.isChainSupported.selector),
-      abi.encode(false)
+      abi.encode(true)
     );
     vm.mockCall(CCIP_ROUTER, abi.encodeWithSelector(IRouterClient.getFee.selector), abi.encode(10));
-    vm.expectRevert(bytes(Errors.NOT_ENOUGH_VALUE_TO_PAY_BRIDGE_FEES));
-    (bool success, ) = address(ccipAdapter).delegatecall(
+    (bool success, bytes memory returnData) = address(ccipAdapter).delegatecall(
       abi.encodeWithSelector(
         IBaseAdapter.forwardMessage.selector,
         RECEIVER_CROSS_CHAIN_CONTROLLER,
@@ -138,6 +140,7 @@ contract CCIPAdapterTest is Test {
       )
     );
     assertEq(success, false);
+    assertEq(returnData, abi.encodeWithSignature("Error(string)", Errors.NOT_ENOUGH_VALUE_TO_PAY_BRIDGE_FEES));
   }
 
   function testForwardMessageWhenWrongReceiver() public {
