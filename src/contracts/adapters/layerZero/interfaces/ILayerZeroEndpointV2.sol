@@ -27,6 +27,12 @@ struct Origin {
   uint64 nonce;
 }
 
+struct SetConfigParam {
+  uint32 dstEid;
+  uint32 configType;
+  bytes config;
+}
+
 interface ILayerZeroEndpointV2 {
   function quote(
     MessagingParams calldata _params,
@@ -37,4 +43,16 @@ interface ILayerZeroEndpointV2 {
     MessagingParams calldata _params,
     address _refundAddress
   ) external payable returns (MessagingReceipt memory);
+
+  function setConfig(
+    address _oapp,
+    address _lib,
+    SetConfigParam[] calldata _params
+  ) external;
+
+  function setDelegate(address _delegate) external;
+
+  function setSendLibrary(address _oapp, uint32 _eid, address _newLib) external;
+
+  function setReceiveLibrary(address _oapp, uint32 _eid, address _newLib, uint256 _gracePeriod) external;
 }
