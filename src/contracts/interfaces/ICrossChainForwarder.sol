@@ -52,6 +52,18 @@ interface ICrossChainForwarder {
   }
 
   /**
+   * @notice object storing the configuration for a bridge adapter
+   * @param destinationChainId id of the destination chain
+   * @param bridgeAdapter address of the bridge adapter
+   * @param data ABI-encoded configuration data
+   */
+  struct BridgeAdapterConfig {
+    uint256 destinationChainId;
+    address bridgeAdapter;
+    bytes data;
+  }
+
+  /**
    * @notice emitted when a transaction is successfully forwarded through a bridge adapter
    * @param envelopeId internal id of the envelope
    * @param envelope the Envelope type data
@@ -93,6 +105,19 @@ interface ICrossChainForwarder {
     address destinationBridgeAdapter,
     bool indexed allowed
   );
+
+  /**
+   * @notice emitted when a registered bridge adapter configuration call succeeds
+   * @param destinationChainId id of the destination chain where the bridge adapter is registered
+   * @param bridgeAdapter address of the configured bridge adapter
+   * @param data ABI-encoded bridge adapter configuration
+   */
+  event BridgeAdapterConfigured(
+    uint256 indexed destinationChainId,
+    address indexed bridgeAdapter,
+    bytes data
+  );
+
   /**
    * @notice emitted when the optimal bandwidth is updated for a specified receiver chain
    * @param chainId id of the receiver chain that gets the new optimal bandwidth
@@ -200,6 +225,12 @@ interface ICrossChainForwarder {
    * @param bridgeAdapters array of bridge adapter addresses to disable
    */
   function disableBridgeAdapters(BridgeAdapterToDisable[] memory bridgeAdapters) external;
+
+  /**
+   * @notice method to configure registered bridge adapters
+   * @param bridgeAdapterConfigs array of new bridge adapter configurations
+   */
+  function configBridgeAdapters(BridgeAdapterConfig[] memory bridgeAdapterConfigs) external;
 
   /**
    * @notice method to remove sender addresses

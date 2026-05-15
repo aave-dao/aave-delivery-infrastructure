@@ -84,3 +84,18 @@ diff -ruN src/contracts/CrossChainForwarder.sol src/contracts/CrossChainForwarde
  
          bridgeAdapterConfigs.push(
            ChainIdBridgeConfig({
+@@ -503,9 +503,9 @@
+       require(adapterRegistered, Errors.CONFIGURABLE_ADAPTER_NOT_REGISTERED);
+ 
+-      Address.functionDelegateCall(
+-        bridgeAdapterConfig.bridgeAdapter,
+-        abi.encodeWithSelector(IConfigurableAdapter.config.selector, bridgeAdapterConfig.destinationChainId, bridgeAdapterConfig.data),
+-        Errors.ADAPTER_CONFIG_FAILED
+-      );
++      //Address.functionDelegateCall(
++      //  bridgeAdapterConfig.bridgeAdapter,
++      //  abi.encodeWithSelector(IConfigurableAdapter.config.selector, bridgeAdapterConfig.destinationChainId, bridgeAdapterConfig.data),
++      //  Errors.ADAPTER_CONFIG_FAILED
++      //);
+ 
+       emit BridgeAdapterConfigured(bridgeAdapterConfig.destinationChainId, bridgeAdapterConfig.bridgeAdapter, bridgeAdapterConfig.data);

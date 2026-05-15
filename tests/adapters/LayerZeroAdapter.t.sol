@@ -8,6 +8,7 @@ import {ILayerZeroAdapter} from '../../src/contracts/adapters/layerZero/ILayerZe
 import {ChainIds} from 'solidity-utils/contracts/utils/ChainHelpers.sol';
 import {Errors} from '../../src/contracts/libs/Errors.sol';
 import {BaseAdapterTest} from './BaseAdapterTest.sol';
+import {IERC5313} from 'openzeppelin-contracts/contracts/interfaces/IERC5313.sol';
 
 contract LayerZeroAdapterTest is BaseAdapterTest {
   LayerZeroAdapter layerZeroAdapter;
@@ -324,5 +325,88 @@ contract LayerZeroAdapterTest is BaseAdapterTest {
 
     assertEq(success, true);
     assertEq(returnData, abi.encode(lzEndpoint, 2));
+  }
+
+  function testConfig(
+    address crossChainController,
+    address lzEndpoint,
+    address originForwarder,
+    uint256 baseGasLimit,
+    address cccOwner,
+    address delegate
+  )
+    public
+    setLZAdapter(crossChainController, lzEndpoint, originForwarder, baseGasLimit, ChainIds.ETHEREUM)
+  {
+    vm.assume(delegate != address(0));
+    vm.assume(cccOwner != address(0));
+
+    vm.mockCall(
+      crossChainController,
+      abi.encodeWithSelector(IERC5313.owner.selector),
+      abi.encode(cccOwner)
+    );
+    vm.mockCall(
+      lzEndpoint,
+      abi.encodeWithSelector(ILayerZeroEndpointV2.setDelegate.selector),
+      abi.encode()
+    );
+
+    hoax(cccOwner);
+    vm.expectCall(lzEndpoint, abi.encodeCall(ILayerZeroEndpointV2.setDelegate, (delegate)));
+    layerZeroAdapter.config(0, abi.encode(delegate));
+    vm.clearMockedCalls();
+  }
+
+  function testConfigWhenNotCCCOwner(
+    address crossChainController,
+    address lzEndpoint,
+    address originForwarder,
+    uint256 baseGasLimit,
+    address cccOwner,
+    address caller,
+    address delegate
+  )
+    public
+    setLZAdapter(crossChainController, lzEndpoint, originForwarder, baseGasLimit, ChainIds.ETHEREUM)
+  {
+    vm.assume(delegate != address(0));
+    vm.assume(cccOwner != address(0));
+    vm.assume(caller != cccOwner);
+
+    vm.mockCall(
+      crossChainController,
+      abi.encodeWithSelector(IERC5313.owner.selector),
+      abi.encode(cccOwner)
+    );
+
+    hoax(caller);
+    vm.expectRevert(bytes(Errors.CALLER_NOT_CC_OWNER));
+    layerZeroAdapter.config(0, abi.encode(delegate));
+    vm.clearMockedCalls();
+  }
+
+  function testConfigWhenDelegateZero(
+    address crossChainController,
+    address lzEndpoint,
+    address originForwarder,
+    uint256 baseGasLimit,
+    address cccOwner
+  )
+    public
+    setLZAdapter(crossChainController, lzEndpoint, originForwarder, baseGasLimit, ChainIds.ETHEREUM)
+  {
+    vm.assume(cccOwner != address(0));
+
+    vm.mockCall(
+      crossChainController,
+      abi.encodeWithSelector(IERC5313.owner.selector),
+      abi.encode(cccOwner)
+    );
+
+    hoax(cccOwner);
+    vm.expectRevert(bytes(Errors.INVALID_ADAPTER_CONFIG));
+    layerZeroAdapter.config(0, abi.encode(address(0)));
+    vm.clearMockedCalls();
   }
 }
