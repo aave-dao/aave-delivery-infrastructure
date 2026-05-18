@@ -140,7 +140,10 @@ contract CCIPAdapterTest is Test {
       )
     );
     assertEq(success, false);
-    assertEq(returnData, abi.encodeWithSignature("Error(string)", Errors.NOT_ENOUGH_VALUE_TO_PAY_BRIDGE_FEES));
+    assertEq(
+      returnData,
+      abi.encodeWithSignature('Error(string)', Errors.NOT_ENOUGH_VALUE_TO_PAY_BRIDGE_FEES)
+    );
   }
 
   function testForwardMessageWhenWrongReceiver() public {

@@ -44,7 +44,9 @@ contract EmergencyRegistryTest is Test {
     chains[0] = chainId;
 
     hoax(notOwner);
-    vm.expectRevert(bytes(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, notOwner)));
+    vm.expectRevert(
+      bytes(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, notOwner))
+    );
     emergencyRegistry.setEmergency(chains);
   }
 

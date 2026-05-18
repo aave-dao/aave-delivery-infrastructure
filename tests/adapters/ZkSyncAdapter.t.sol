@@ -228,7 +228,11 @@ contract ZkSyncAdapterTest is BaseAdapterTest {
     vm.expectCall(
       crossChainController,
       0,
-      abi.encodeWithSelector(ICrossChainReceiver.receiveCrossChainMessage.selector, message, ChainIds.ETHEREUM)
+      abi.encodeWithSelector(
+        ICrossChainReceiver.receiveCrossChainMessage.selector,
+        message,
+        ChainIds.ETHEREUM
+      )
     );
     zkSyncAdapter.receiveMessage(message);
   }

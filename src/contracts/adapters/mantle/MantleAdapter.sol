@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 import {ChainIds} from 'solidity-utils/contracts/utils/ChainHelpers.sol';
 import {OpAdapter, IOpAdapter} from '../optimism/OpAdapter.sol';
 import {IMantleAdapter} from './IMantleAdapter.sol';
+
 /**
  * @title MantleAdapter
  * @author BGD Labs

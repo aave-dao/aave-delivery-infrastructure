@@ -64,7 +64,6 @@ contract LineaAdapter is ILineaAdapter, BaseAdapter {
     );
     require(receiver != address(0), Errors.RECEIVER_NOT_SET);
 
-
     require(address(this).balance >= L2_FEE, Errors.NOT_ENOUGH_VALUE_TO_PAY_BRIDGE_FEES);
 
     // @dev we set _fee to hardcoded L2_FEE to overpay to ensure automatic claiming. If by some case it is not enough then

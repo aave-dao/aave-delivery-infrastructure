@@ -11,7 +11,9 @@ library MantleAdapterDeploymentHelper {
     address ovm;
   }
 
-  function getAdapterCode(MantleAdapterArgs memory mantleArgs) internal pure returns (bytes memory) {
+  function getAdapterCode(
+    MantleAdapterArgs memory mantleArgs
+  ) internal pure returns (bytes memory) {
     bytes memory creationCode = mantleArgs.baseArgs.isTestnet
       ? type(MantleAdapterTestnet).creationCode
       : type(MantleAdapter).creationCode;

@@ -23,6 +23,7 @@ interface IWithGuardian {
    * @dev get guardian address;
    */
   function guardian() external view returns (address);
+
   /**
    * @dev method to update the guardian
    * @param newGuardian the new guardian address

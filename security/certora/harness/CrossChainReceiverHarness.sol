@@ -4,12 +4,8 @@ import {CrossChainReceiverHarnessAbstract} from './CrossChainReceiverHarnessAbst
 import {CrossChainReceiver} from '../munged/src/contracts/CrossChainReceiver.sol';
 
 contract CrossChainReceiverHarness is CrossChainReceiverHarnessAbstract {
-
-constructor(
+  constructor(
     ConfirmationInput[] memory initialRequiredConfirmations,
     ReceiverBridgeAdapterConfigInput[] memory bridgeAdaptersToAllow
-  ) CrossChainReceiver(initialRequiredConfirmations, bridgeAdaptersToAllow) 
-  {}
-
-
+  ) CrossChainReceiver(initialRequiredConfirmations, bridgeAdaptersToAllow) {}
 }

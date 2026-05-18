@@ -18,6 +18,7 @@ On `BaseScript` we can find the method to deploy using Create2 and the method to
 - [Deploy_Granular_CCC_Guardian.s.sol](./access_control/Deploy_Granular_CCC_Guardian.sol)
 
 On this script we have the base code to deploy the GranularGuardian. For this it will need the:
+
 - Default admin: should be executor lvl 1
 - Retry Guardian: should be BGD Guardian, or guardian that will be able to call the aDI retry methods.
 - Solve Emergency Guardian: should be the Aave Governance Guardian, which will be allowed (when signaled by emergency oracle) to solve emergencies on aDI.

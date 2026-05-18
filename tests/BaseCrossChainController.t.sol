@@ -54,7 +54,6 @@ abstract contract BaseCrossChainControllerTest is Test {
     testToken = new ERC20('Test', 'TST');
     proxyFactory = new TransparentProxyFactory();
 
-
     // receiver configs
     uint256[] memory chainIds = new uint256[](1);
     chainIds[0] = ChainIds.ETHEREUM;
