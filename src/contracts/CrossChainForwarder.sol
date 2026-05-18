@@ -485,10 +485,15 @@ contract CrossChainForwarder is OwnableWithGuardian, ICrossChainForwarder {
     }
   }
 
+  /**
+   * @notice method to configure registered bridge adapters via a delegatecall to each adapter's
+   *         `IConfigurableAdapter.config` hook
+   * @param bridgeAdapterConfigs array of bridge adapter configurations to apply
+   */
   function _configBridgeAdapters(BridgeAdapterConfig[] memory bridgeAdapterConfigs) internal {
     for (uint256 i = 0; i < bridgeAdapterConfigs.length; i++) {
       BridgeAdapterConfig memory bridgeAdapterConfig = bridgeAdapterConfigs[i];
-      ChainIdBridgeConfig[] memory bridgeAdapters = _bridgeAdaptersByChain[
+      ChainIdBridgeConfig[] storage bridgeAdapters = _bridgeAdaptersByChain[
         bridgeAdapterConfig.destinationChainId
       ];
       bool adapterRegistered;

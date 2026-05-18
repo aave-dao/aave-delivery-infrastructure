@@ -82,9 +82,10 @@ contract LayerZeroAdapter is BaseAdapter, ILayerZeroAdapter, ILayerZeroReceiver 
   }
 
   /// @notice Sets the LayerZero delegate for the current OApp execution context.
-  /// @dev Call through `CrossChainForwarder.configAdapter` to set the CCC OApp delegate,
+  /// @dev Call through `CrossChainForwarder.configBridgeAdapters` to set the CCC OApp delegate,
   ///      and call the adapter directly to set this adapter OApp delegate. In both cases,
-  ///      the call should be made from the CCC owner.
+  ///      the call should be made from the CCC owner. The `remoteChainId` parameter is ignored:
+  ///      the LayerZero delegate is global to the OApp, not scoped per remote chain.
   /// @param data ABI-encoded delegate address: `abi.encode(delegate)`.
   function config(uint256, bytes calldata data) external override onlyCCCOwner {
     address delegate = abi.decode(data, (address));

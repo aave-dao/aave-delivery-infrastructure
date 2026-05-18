@@ -9,6 +9,9 @@ pragma solidity ^0.8.0;
 interface IConfigurableAdapter {
   /**
    * @notice Applies adapter-specific configuration.
+   * @dev The semantics of `remoteChainId` and `data` are adapter-defined. Implementations may
+   *      ignore `remoteChainId` when the configuration is global to the adapter rather than
+   *      scoped per remote chain.
    * @param remoteChainId id of the remote chain this configuration targets.
    * @param data ABI-encoded adapter configuration.
    */
