@@ -1,11 +1,7 @@
 // SPDX-License-Identifier: BUSL-1.1
 pragma solidity ^0.8.0;
 
-import {
-  MegaEthAdapter,
-  IBaseAdapter,
-  MegaEthAdapterArgs as MegaEthAdapterArgsType
-} from '../../src/contracts/adapters/megaEth/MegaEthAdapter.sol';
+import {MegaEthAdapter, IBaseAdapter, MegaEthAdapterArgs as MegaEthAdapterArgsType} from '../../src/contracts/adapters/megaEth/MegaEthAdapter.sol';
 import './BaseAdapterScript.sol';
 
 library MegaEthAdapterDeploymentHelper {

@@ -20,6 +20,7 @@ forge install // Install dependency libraries
 In order to run tests, a `.env` needs to be configured.
 
 An `.env.example` in included in the repository, that can be used as template to fill all the required fields
+
 ```shell
 cp .env.example .env
 ```
@@ -43,6 +44,7 @@ Being Foundry based, any other granular way of executing isolated tests applies 
 The deployment scripts can be found [HERE](../scripts/). They inherit from the contract [BaseScripts](../scripts/BaseScript.sol) to register and use the deployed addresses between them, and coordinate a full network deployment.
 
 The scripts consist of:
+
 - [Adapters](../scripts/Adapters/): Folder containing all the bridge adapter contracts deployment scripts
 - [CCC](../scripts/CCC/): Folder containing the necessary scripts to deploy and configure the `CrossChainController`s.
 - [Contract extensions](../scripts/contract_extensions/): Folder with contracts that have been extended for testnet deployments. These contracts override the parent contract with specific configurations
@@ -54,11 +56,13 @@ The scripts consist of:
 We have created a [Makefile](../Makefile) with the necessary commands to trigger the different deployment scripts.
 
 To trigger a full deployment this command should be called:
+
 ```shell
 make deploy-full # Deployment for all the configured networks.
 ```
 
 with the environment variable flags:
+
 - `PROD`: if true, the deployment will happen on mainnet networks. If not it will deploy on test networks
 - `LEDGER`: if true, the deployment will use a (connected) Ledger. If not, it will use the private key specified in the
   local environment.

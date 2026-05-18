@@ -11,15 +11,16 @@
 - **EmergencyRegistry**: Contract that holds a registry of the emergency events activated on all the chains controlled by the Aave Governance.
   To trigger an emergency on destination chain, a counter will be incremented in the registry.
 - **BridgeAdapter/s**: Contracts with logic to interact with each Bridge Provider. Used as a stateless library from
-the CCC (via DELEGATECALL) when sending messages, and receiving the `Transaction`s and forwarding them to the CCC on the receiving flow.
+  the CCC (via DELEGATECALL) when sending messages, and receiving the `Transaction`s and forwarding them to the CCC on the receiving flow.
 - **Message**: Bytes-encoded data to be bridged from an origin network to a destination. Messages don't need to be unique.
-Messages are the only data structure exposed for senders via the cross-chain infrastructure.
+  Messages are the only data structure exposed for senders via the cross-chain infrastructure.
 - **Envelope**: CCC internal unique object containing a `Message`, origin and destination addresses, and an envelope nonce.
-Required to retry sending a message if the envelope arrived to the destination chain, but was invalidated before execution.
+  Required to retry sending a message if the envelope arrived to the destination chain, but was invalidated before execution.
 - **Transaction**: CCC internal unique object containing an `Envelope` and a transaction nonce. It is the final object
-used for bridging: every time an envelope is forwarded (no matter if originally or via retry), a new transaction is created.
+  used for bridging: every time an envelope is forwarded (no matter if originally or via retry), a new transaction is created.
 
 ## CrossChainController (CCC)
+
 - The CCC has 3 responsibilities:
   1. Control forwarding of messages.
   2. Control receiving of messages.
@@ -39,6 +40,7 @@ used for bridging: every time an envelope is forwarded (no matter if originally 
     (number of allowed adapters is >= than confirmations)
 
 ## CrossChainForwarder
+
 - Only the approved senders can forward a message.
 - Internal transaction nonces are sequential.
 - Internal envelope nonces are sequential.
@@ -66,6 +68,7 @@ used for bridging: every time an envelope is forwarded (no matter if originally 
 - An Envelope/Transaction can only be forwarded to a supported (has a registered adapter) network.
 
 ## CrossChainReceiver
+
 - A Transaction can only be received from authorized bridge adapters.
 - Only the Owner can set the receiver's bridge adapters.
 - Only the Owner can set the required confirmations.
@@ -78,20 +81,25 @@ used for bridging: every time an envelope is forwarded (no matter if originally 
 - When setting a new invalidation timestamp, all previous Envelopes that have less than the `_requiredConfirmations`
   (that have not been confirmed) will be invalidated: they can not be accepted reach confirmations and so, can not be delivered.
 - A message can not get Confirmed or Delivered when requiredConfirmations for the chain are set to 0.
+
 ## EmergencyRegistry
+
 - Only the owner can set an emergency on destination chain
 
 ## BridgeAdapters (CCIP, LayerZero, Hyperlane)
 
 On sending side:
+
 - A receiver for the message must be set
 - The logic to send messages MUST NOT use any storage, as it will be called via delegatecall from the CCC.
 
 On receiving side:
+
 - When receiving a message, the origin chain must be supported by the system.
 - When receiving a message, the origin forwarder must be a trusted contract (by general rule, CCC on the origin chain).
 
 ## SameChainAdapter
+
 - Must forward a message directly to receiver contract located in same chain as originator.
 - Used specifically on core network (Governance) as a fallback in case all voting networks are unreachable.
 - Used when a payload needs to be executed on the same chain as Governance, skipping bridging.

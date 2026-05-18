@@ -1,10 +1,22 @@
-
-import { getRPCUrl, ChainId } from "@bgd-labs/rpc-env";
-import { execSync } from "child_process";
-import { existsSync, readFileSync, writeFileSync } from "fs";
-import { Client, createClient, getAddress, Hex, http } from "viem";
-import { getStorageAt } from "viem/actions";
-import {GovernanceV3Arbitrum, GovernanceV3Avalanche, GovernanceV3Base, GovernanceV3BNB, GovernanceV3Ethereum, GovernanceV3Gnosis, GovernanceV3Linea, GovernanceV3Metis, GovernanceV3Optimism, GovernanceV3Polygon, GovernanceV3Scroll, GovernanceV3ZkSync} from '@bgd-labs/aave-address-book'
+import {getRPCUrl, ChainId} from '@bgd-labs/rpc-env';
+import {execSync} from 'child_process';
+import {existsSync, readFileSync, writeFileSync} from 'fs';
+import {Client, createClient, getAddress, Hex, http} from 'viem';
+import {getStorageAt} from 'viem/actions';
+import {
+  GovernanceV3Arbitrum,
+  GovernanceV3Avalanche,
+  GovernanceV3Base,
+  GovernanceV3BNB,
+  GovernanceV3Ethereum,
+  GovernanceV3Gnosis,
+  GovernanceV3Linea,
+  GovernanceV3Metis,
+  GovernanceV3Optimism,
+  GovernanceV3Polygon,
+  GovernanceV3Scroll,
+  GovernanceV3ZkSync,
+} from '@bgd-labs/aave-address-book';
 
 const CHAIN_ID_API_KEY_MAP = {
   [ChainId.mainnet]: process.env.ETHERSCAN_API_KEY_MAINNET,
@@ -30,15 +42,13 @@ const bytes32toAddress = (bytes32: Hex) => {
 const getImplementationStorageSlot = async (client: Client, address: Hex) => {
   return (await getStorageAt(client, {
     address,
-    slot: "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
+    slot: '0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc',
   })) as Hex;
 };
 
-async function snapshotCCC({ CHAIN_ID, CROSS_CHAIN_CONTROLLER }, isEmergencyMode = false) {
-  const client = createClient({ transport: http(getRPCUrl(CHAIN_ID)) });
-  const impl = bytes32toAddress(
-    await getImplementationStorageSlot(client, CROSS_CHAIN_CONTROLLER),
-  );
+async function snapshotCCC({CHAIN_ID, CROSS_CHAIN_CONTROLLER}, isEmergencyMode = false) {
+  const client = createClient({transport: http(getRPCUrl(CHAIN_ID))});
+  const impl = bytes32toAddress(await getImplementationStorageSlot(client, CROSS_CHAIN_CONTROLLER));
 
   const destination = `flattened/${CHAIN_ID}/${impl}.sol`;
   if (!existsSync(destination)) {
@@ -48,29 +58,37 @@ async function snapshotCCC({ CHAIN_ID, CROSS_CHAIN_CONTROLLER }, isEmergencyMode
   // const codeDiff = `make git-diff before=${destination} after=flattened/CrossChainController${isEmergencyMode ? 'WithEmergencyMode' : ''}.sol out=${CHAIN_ID}.patch`;
   // execSync(codeDiff);
 
-  const command = `mkdir -p reports/${CHAIN_ID} && forge inspect --json ${destination}:CrossChainController${isEmergencyMode ? 'WithEmergencyMode' : ''} storage > reports/${CHAIN_ID}/${isEmergencyMode ? 'emergency_storage' : 'storage'}_${CROSS_CHAIN_CONTROLLER}.json`;
+  const command = `mkdir -p reports/${CHAIN_ID} && forge inspect --json ${destination}:CrossChainController${
+    isEmergencyMode ? 'WithEmergencyMode' : ''
+  } storage > reports/${CHAIN_ID}/${
+    isEmergencyMode ? 'emergency_storage' : 'storage'
+  }_${CROSS_CHAIN_CONTROLLER}.json`;
   execSync(command);
 
   execSync(
-    `npx @bgd-labs/aave-cli diff-storage reports/${CHAIN_ID}/${isEmergencyMode ? 'emergency_storage' : 'storage'}_${CROSS_CHAIN_CONTROLLER}.json  reports/${isEmergencyMode ? 'emergency_storage_new' : 'storage_new'}.json -o diffs/storage/${CHAIN_ID}.md`,
-  )
+    `npx @bgd-labs/aave-cli diff-storage reports/${CHAIN_ID}/${
+      isEmergencyMode ? 'emergency_storage' : 'storage'
+    }_${CROSS_CHAIN_CONTROLLER}.json  reports/${
+      isEmergencyMode ? 'emergency_storage_new' : 'storage_new'
+    }.json -o diffs/storage/${CHAIN_ID}.md`
+  );
 }
 
 async function diffReference() {
   execSync(
-    `forge flatten src/contracts/CrossChainController.sol -o flattened/CrossChainController.sol && forge fmt flattened/CrossChainController.sol`,
+    `forge flatten src/contracts/CrossChainController.sol -o flattened/CrossChainController.sol && forge fmt flattened/CrossChainController.sol`
   );
   execSync(
-    `forge inspect --json flattened/CrossChainController.sol:CrossChainController storage > reports/storage_new.json`,
+    `forge inspect --json flattened/CrossChainController.sol:CrossChainController storage > reports/storage_new.json`
   );
 }
 
 async function diffReferenceEmergencyMode() {
   execSync(
-    `forge flatten src/contracts/CrossChainControllerWithEmergencyMode.sol -o flattened/CrossChainControllerWithEmergencyMode.sol && forge fmt flattened/CrossChainControllerWithEmergencyMode.sol`,
+    `forge flatten src/contracts/CrossChainControllerWithEmergencyMode.sol -o flattened/CrossChainControllerWithEmergencyMode.sol && forge fmt flattened/CrossChainControllerWithEmergencyMode.sol`
   );
   execSync(
-    `forge inspect --json flattened/CrossChainControllerWithEmergencyMode.sol:CrossChainControllerWithEmergencyMode storage > reports/emergency_storage_new.json`,
+    `forge inspect --json flattened/CrossChainControllerWithEmergencyMode.sol:CrossChainControllerWithEmergencyMode storage > reports/emergency_storage_new.json`
   );
 }
 

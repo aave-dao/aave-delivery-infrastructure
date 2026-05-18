@@ -373,7 +373,9 @@ contract CrossChainControllerWithEmergencyModeTest is BaseCrossChainControllerTe
   function testUpdateCLEmergencyOracleWhenNotOwner() public {
     address newChainlinkEmergencyOracle = address(101);
 
-    vm.expectRevert(bytes(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, address(this))));
+    vm.expectRevert(
+      bytes(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, address(this)))
+    );
     ICrossChainControllerWithEmergencyMode(address(crossChainController)).updateCLEmergencyOracle(
       newChainlinkEmergencyOracle
     );

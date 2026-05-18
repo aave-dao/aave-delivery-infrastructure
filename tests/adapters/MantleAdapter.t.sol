@@ -9,7 +9,6 @@ import {Errors} from '../../src/contracts/libs/Errors.sol';
 import {BaseAdapterTest} from './BaseAdapterTest.sol';
 import {ICrossDomainMessenger} from '../../src/contracts/adapters/optimism/interfaces/ICrossDomainMessenger.sol';
 
-
 contract MantleAdapterTest is BaseAdapterTest {
   MantleAdapter internal mantleAdapter;
   event SetTrustedRemote(uint256 indexed originChainId, address indexed originForwarder);
@@ -156,7 +155,13 @@ contract MantleAdapterTest is BaseAdapterTest {
     bytes memory message
   )
     public
-    setMantleAdapter(crossChainController, ovmCrossDomainMessenger, originForwarder, baseGasLimit, 1)
+    setMantleAdapter(
+      crossChainController,
+      ovmCrossDomainMessenger,
+      originForwarder,
+      baseGasLimit,
+      1
+    )
   {
     hoax(ovmCrossDomainMessenger);
 
@@ -187,7 +192,13 @@ contract MantleAdapterTest is BaseAdapterTest {
     address remote
   )
     public
-    setMantleAdapter(crossChainController, ovmCrossDomainMessenger, originForwarder, baseGasLimit, 1)
+    setMantleAdapter(
+      crossChainController,
+      ovmCrossDomainMessenger,
+      originForwarder,
+      baseGasLimit,
+      1
+    )
   {
     vm.assume(remote != originForwarder);
     hoax(ovmCrossDomainMessenger);

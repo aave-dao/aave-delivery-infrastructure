@@ -19,13 +19,16 @@ abstract contract OwnableWithGuardian is Ownable, IWithGuardian {
     _checkOwnerOrGuardian();
     _;
   }
+
   function guardian() public view override returns (address) {
     return _guardian;
   }
+
   /// @inheritdoc IWithGuardian
   function updateGuardian(address newGuardian) external override onlyOwnerOrGuardian {
     _updateGuardian(newGuardian);
   }
+
   /**
    * @dev method to update the guardian
    * @param newGuardian the new guardian address

@@ -237,7 +237,9 @@ contract CrossChainReceiverTest is BaseTest {
       memory newRequiredConfirmations = new ICrossChainReceiver.ConfirmationInput[](1);
     newRequiredConfirmations[0] = confirmation;
 
-    vm.expectRevert(bytes(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, address(this))));
+    vm.expectRevert(
+      bytes(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, address(this)))
+    );
     crossChainReceiver.updateConfirmations(newRequiredConfirmations);
   }
 
@@ -297,7 +299,9 @@ contract CrossChainReceiverTest is BaseTest {
       chainIds: chainIds
     });
 
-    vm.expectRevert(bytes(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, address(this))));
+    vm.expectRevert(
+      bytes(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, address(this)))
+    );
     crossChainReceiver.allowReceiverBridgeAdapters(bridgeAdaptersToAllow);
 
     assertEq(crossChainReceiver.isReceiverBridgeAdapterAllowed(newBridgeAdapter, 1), false);
@@ -365,7 +369,9 @@ contract CrossChainReceiverTest is BaseTest {
     disallowBridges[0].chainIds[0] = 1;
     disallowBridges[0].chainIds[1] = 137;
 
-    vm.expectRevert(bytes(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, address(this))));
+    vm.expectRevert(
+      bytes(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, address(this)))
+    );
     crossChainReceiver.disallowReceiverBridgeAdapters(disallowBridges);
 
     assertEq(crossChainReceiver.isReceiverBridgeAdapterAllowed(BRIDGE_ADAPTER, 1), true);
@@ -803,7 +809,9 @@ contract CrossChainReceiverTest is BaseTest {
       validityTimestamp: timestamp
     });
 
-    vm.expectRevert(bytes(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, address(this))));
+    vm.expectRevert(
+      bytes(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, address(this)))
+    );
     crossChainReceiver.updateMessagesValidityTimestamp(newValidityTimestamps);
 
     assertEq(crossChainReceiver.getConfigurationByChain(1).validityTimestamp, uint120(0));
