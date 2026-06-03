@@ -1,3 +1,3 @@
 [submodule "lib/solidity-utils"]
 	path = lib/solidity-utils
-	url = https://github.com/bgd-labs/solidity-utils
+	url = https://github.com/aave-dao/solidity-utils
