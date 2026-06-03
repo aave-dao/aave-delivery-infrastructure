@@ -1,0 +1,16 @@
+src/contracts/adapters/layerZero/LayerZeroAdapter.sol
+  h_739c25e72c37fb 136-137,173-174
+src/contracts/adapters/ccip/CCIPAdapter.sol
+  h_739c25e72c37fb 144-145,168-169
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "35dca01863c1dafc26062f3acce3e31dc9538302",
+  "prompts": {},
+  "humans": {
+    "h_739c25e72c37fb": {
+      "author": "DhairyaSethi <55102840+DhairyaSethi@users.noreply.github.com>"
+    }
+  }
+}
