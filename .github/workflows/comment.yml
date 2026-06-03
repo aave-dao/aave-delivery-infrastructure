@@ -9,6 +9,7 @@ on:
 
 permissions:
   actions: read
+  contents: read
   issues: write
   checks: read
   statuses: read
@@ -16,8 +17,4 @@ permissions:
 
 jobs:
   comment:
-    uses: bgd-labs/github-workflows/.github/workflows/comment.yml@main
-    secrets:
-      # the provided PAT needs write and write permissions on issues and pull requests
-      # the PAT is only really needed when commenting of prs from forks
-      READ_ONLY_PAT: ${{ secrets.READ_ONLY_PAT }}
+    uses: aave-dao/github-workflows/.github/workflows/comment.yml@main
