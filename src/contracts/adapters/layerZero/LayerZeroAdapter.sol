@@ -156,6 +156,8 @@ contract LayerZeroAdapter is BaseAdapter, ILayerZeroAdapter, ILayerZeroReceiver 
       return ChainIds.SONIC;
     } else if (nativeChainId == 30383) {
       return ChainIds.PLASMA;
+    } else if (nativeChainId == 30390) {
+      return ChainIds.MONAD;
     } else {
       return 0;
     }
@@ -191,6 +193,8 @@ contract LayerZeroAdapter is BaseAdapter, ILayerZeroAdapter, ILayerZeroReceiver 
       return 30332;
     } else if (infraChainId == ChainIds.PLASMA) {
       return 30383;
+    } else if (infraChainId == ChainIds.MONAD) {
+      return 30390;
     } else {
       return uint16(0);
     }
