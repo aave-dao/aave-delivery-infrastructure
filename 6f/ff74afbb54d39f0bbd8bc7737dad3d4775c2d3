@@ -1,0 +1,55 @@
+src/contracts/adapters/wormhole/interfaces/IVaaV1Receiver.sol
+  s_7992b80a31c465::t_52e530133e0c19 1-18
+src/contracts/adapters/wormhole/IWormholeExecutorAdapter.sol
+  s_7992b80a31c465::t_bfda1f899efdd0 42-43,45
+  s_7992b80a31c465::t_65c96374d2ddd3 1-41,44,46
+src/contracts/libs/Errors.sol
+  s_7992b80a31c465::t_0e1acc067da041 56-59
+src/contracts/adapters/wormhole/interfaces/IExecutorQuoterRouter.sol
+  s_7992b80a31c465::t_43ac92807a9a9e 1-49
+src/contracts/adapters/wormhole/WormholeExecutorAdapter.sol
+  s_7992b80a31c465::t_6e2453e8f091af 1-69,72-114,116,124,142-153,158,165-180,182-189,194-201,226-227,234-244,269-270,277-281
+  h_739c25e72c37fb 71,193
+  s_7992b80a31c465::t_e98ed03f175f58 159-160,162-164
+  s_7992b80a31c465::t_febe4130014dbc 115,117-123,125-141,154-157,161
+  s_7992b80a31c465::t_c42141a07ff0bf 202-225,228-233,245-268,271-276
+  s_7992b80a31c465::t_c48764b0438486 190-192
+  s_7992b80a31c465::t_3e4b20e0ae8d6c 181
+  s_7992b80a31c465::t_c64a7b0fd19981 70
+tests/adapters/WormholeExecutorAdapter.t.sol
+  s_7992b80a31c465::t_d77924522cf093 28
+  s_7992b80a31c465::t_a6eda9247baaa6 258,265,296,306,316
+  s_7992b80a31c465::t_08554dd61c30fe 192,194
+  s_7992b80a31c465::t_0d322647ab63df 1-27,29-68,70-124,131-136,146-162,164-169,172-191,193,195-257,259-264,266-295,297-305,307-315,317-325
+  s_7992b80a31c465::t_154b20a9544f9f 163,170-171
+  s_7992b80a31c465::t_286284c81871f6 69
+  s_7992b80a31c465::t_0bba50e38a79a8 125-130,137-145
+scripts/Adapters/DeployWormholeExecutorAdapter.sol
+  s_7992b80a31c465::t_c38fbcd798fefe 1-60,62-65
+  h_739c25e72c37fb 61
+src/contracts/adapters/BaseAdapter.sol
+  h_739c25e72c37fb 76
+src/contracts/adapters/wormhole/interfaces/ICoreBridge.sol
+  s_7992b80a31c465::t_223f61505822cd 1-73
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "6fff74afbb54d39f0bbd8bc7737dad3d4775c2d3",
+  "prompts": {},
+  "humans": {
+    "h_739c25e72c37fb": {
+      "author": "DhairyaSethi <55102840+DhairyaSethi@users.noreply.github.com>"
+    }
+  },
+  "sessions": {
+    "s_7992b80a31c465": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9def768b-64c7-4f4a-8034-f30be6ca618b",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "DhairyaSethi <55102840+DhairyaSethi@users.noreply.github.com>"
+    }
+  }
+}
