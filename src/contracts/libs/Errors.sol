@@ -53,4 +53,8 @@ library Errors {
   string public constant CL_GAS_PRICE_ORACLE_CANT_BE_ADDRESS_0 = '44'; // ChainLink gas price oracle can not be address 0
   string public constant CALLER_NOT_LINEA_MESSAGE_SERVICE = '45'; // caller must be the Linea message service
   string public constant LINEA_MESSAGE_SERVICE_CANT_BE_ADDRESS_0 = '46'; // Linea message service can not be address 0
+  string public constant WORMHOLE_CORE_CANT_BE_ADDRESS_0 = '47'; // Wormhole core bridge can not be address 0
+  string public constant WORMHOLE_QUOTER_ROUTER_CANT_BE_ADDRESS_0 = '48'; // Wormhole executor quoter router can not be address 0
+  string public constant WORMHOLE_QUOTER_CANT_BE_ADDRESS_0 = '49'; // Wormhole executor quoter can not be address 0
+  string public constant INVALID_VAA = '50'; // the received VAA could not be verified by the Wormhole core bridge
 }
