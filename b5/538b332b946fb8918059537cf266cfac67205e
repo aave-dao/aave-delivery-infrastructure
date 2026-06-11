@@ -1,0 +1,16 @@
+src/contracts/adapters/wormhole/WormholeExecutorAdapter.sol
+  h_739c25e72c37fb 4,11,13,18,107
+src/contracts/adapters/wormhole/libs/WormholeExecutorEncoding.sol
+  h_739c25e72c37fb 1-27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "b5538b332b946fb8918059537cf266cfac67205e",
+  "prompts": {},
+  "humans": {
+    "h_739c25e72c37fb": {
+      "author": "DhairyaSethi <55102840+DhairyaSethi@users.noreply.github.com>"
+    }
+  }
+}
