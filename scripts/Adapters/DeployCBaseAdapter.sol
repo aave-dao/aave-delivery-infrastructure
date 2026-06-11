@@ -11,7 +11,7 @@ library CBAdapterDeploymentHelper {
     address ovm;
   }
 
-  function getAdapterCode(CBAdapterArgs memory cbArgs) internal pure returns (bytes memory) {
+  function getAdapterCode(CBAdapterArgs memory cbArgs) internal view returns (bytes memory) {
     bytes memory creationCode = cbArgs.baseArgs.isTestnet
       ? type(CBaseAdapterTestnet).creationCode
       : type(CBaseAdapter).creationCode;

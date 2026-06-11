@@ -11,7 +11,7 @@ library LZAdapterDeploymentHelper {
     address lzEndpoint;
   }
 
-  function getAdapterCode(LZAdapterArgs memory lzArgs) internal pure returns (bytes memory) {
+  function getAdapterCode(LZAdapterArgs memory lzArgs) internal view returns (bytes memory) {
     bytes memory creationCode = lzArgs.baseArgs.isTestnet
       ? type(LayerZeroAdapterTestnet).creationCode
       : type(LayerZeroAdapter).creationCode;

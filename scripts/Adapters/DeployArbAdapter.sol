@@ -12,7 +12,7 @@ library ArbAdapterDeploymentHelper {
     address refundAddress;
   }
 
-  function getAdapterCode(ArbAdapterArgs memory arbArgs) internal pure returns (bytes memory) {
+  function getAdapterCode(ArbAdapterArgs memory arbArgs) internal view returns (bytes memory) {
     bytes memory creationCode = arbArgs.baseArgs.isTestnet
       ? type(ArbitrumAdapterTestnet).creationCode
       : type(ArbAdapter).creationCode;

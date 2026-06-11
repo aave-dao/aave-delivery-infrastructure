@@ -5,7 +5,7 @@ import {SameChainAdapter} from '../../src/contracts/adapters/sameChain/SameChain
 import './BaseAdapterScript.sol';
 
 library SameChainAdapterDeploymentHelper {
-  function getAdapterCode() internal pure returns (bytes memory) {
+  function getAdapterCode() internal view returns (bytes memory) {
     bytes memory creationCode = type(SameChainAdapter).creationCode;
     return abi.encodePacked(creationCode, abi.encode());
   }

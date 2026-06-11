@@ -14,7 +14,7 @@ library ZkSyncAdapterDeploymentHelper {
 
   function getAdapterCode(
     ZkSyncAdapterArgs memory zkSyncArgs
-  ) internal pure returns (bytes memory) {
+  ) internal view returns (bytes memory) {
     bytes memory creationCode = zkSyncArgs.baseArgs.isTestnet
       ? type(ZkSyncAdapterTestnet).creationCode
       : type(ZkSyncAdapter).creationCode;

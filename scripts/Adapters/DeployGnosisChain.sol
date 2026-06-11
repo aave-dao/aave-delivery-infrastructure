@@ -13,7 +13,7 @@ library GnosisAdapterDeploymentHelper {
 
   function getAdapterCode(
     GnosisAdapterArgs memory gnosisArgs
-  ) internal pure returns (bytes memory) {
+  ) internal view returns (bytes memory) {
     bytes memory creationCode = type(GnosisChainAdapter).creationCode;
 
     return

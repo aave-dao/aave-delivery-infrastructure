@@ -5,7 +5,7 @@ import {EmergencyRegistry} from '../../src/contracts/emergency/EmergencyRegistry
 import '../BaseScript.sol';
 
 library EmergencyRegistryDeploymentHelper {
-  function getEmergencyRegistryCode() internal pure returns (bytes memory) {
+  function getEmergencyRegistryCode() internal view returns (bytes memory) {
     return abi.encodePacked(type(EmergencyRegistry).creationCode, abi.encode());
   }
 }

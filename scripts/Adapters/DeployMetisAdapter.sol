@@ -11,7 +11,7 @@ library MetisAdapterDeploymentHelper {
     address ovm;
   }
 
-  function getAdapterCode(MetisAdapterArgs memory metisArgs) internal pure returns (bytes memory) {
+  function getAdapterCode(MetisAdapterArgs memory metisArgs) internal view returns (bytes memory) {
     bytes memory creationCode = metisArgs.baseArgs.isTestnet
       ? type(MetisAdapterTestnet).creationCode
       : type(MetisAdapter).creationCode;

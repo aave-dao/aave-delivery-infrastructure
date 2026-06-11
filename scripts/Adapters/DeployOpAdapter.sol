@@ -11,7 +11,7 @@ library OpAdapterDeploymentHelper {
     address ovm;
   }
 
-  function getAdapterCode(OpAdapterArgs memory opArgs) internal pure returns (bytes memory) {
+  function getAdapterCode(OpAdapterArgs memory opArgs) internal view returns (bytes memory) {
     bytes memory creationCode = opArgs.baseArgs.isTestnet
       ? type(OptimismAdapterTestnet).creationCode
       : type(OpAdapter).creationCode;

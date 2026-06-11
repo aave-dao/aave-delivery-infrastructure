@@ -15,7 +15,7 @@ library ZKEVMAdapterDeploymentHelper {
   function getAdapterCode(
     ZKEVMAdapterArgs memory zkevmArgs,
     uint256 chainId
-  ) internal pure returns (bytes memory) {
+  ) internal view returns (bytes memory) {
     bytes memory creationCode;
     // For now we dont have zk evm testnets as we only have goerli implemented which should no longer be suported
     if (chainId == ChainIds.ETHEREUM) {

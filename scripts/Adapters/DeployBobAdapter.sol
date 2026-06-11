@@ -10,7 +10,7 @@ library BobAdapterDeploymentHelper {
     address ovm;
   }
 
-  function getAdapterCode(BobAdapterArgs memory bobArgs) internal pure returns (bytes memory) {
+  function getAdapterCode(BobAdapterArgs memory bobArgs) internal view returns (bytes memory) {
     bytes memory creationCode = type(BobAdapter).creationCode;
 
     return

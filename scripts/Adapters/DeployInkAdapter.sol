@@ -10,7 +10,7 @@ library InkAdapterDeploymentHelper {
     address ovm;
   }
 
-  function getAdapterCode(InkAdapterArgs memory inkArgs) internal pure returns (bytes memory) {
+  function getAdapterCode(InkAdapterArgs memory inkArgs) internal view returns (bytes memory) {
     bytes memory creationCode = type(InkAdapter).creationCode;
 
     return

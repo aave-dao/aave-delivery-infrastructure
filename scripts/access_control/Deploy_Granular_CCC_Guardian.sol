@@ -8,7 +8,7 @@ library GranularGuardianDeploymentHelper {
   function getGranularGuardianCode(
     IGranularGuardianAccessControl.InitialGuardians memory initialGuardians,
     address crossChainController
-  ) internal pure returns (bytes memory) {
+  ) internal view returns (bytes memory) {
     return
       abi.encodePacked(
         type(GranularGuardianAccessControl).creationCode,

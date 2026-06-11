@@ -12,7 +12,7 @@ library CCIPAdapterDeploymentHelper {
     address linkToken;
   }
 
-  function getAdapterCode(CCIPAdapterArgs memory ccipArgs) internal pure returns (bytes memory) {
+  function getAdapterCode(CCIPAdapterArgs memory ccipArgs) internal view returns (bytes memory) {
     bytes memory creationCode = ccipArgs.baseArgs.isTestnet
       ? type(CCIPAdapterTestnet).creationCode
       : type(CCIPAdapter).creationCode;
