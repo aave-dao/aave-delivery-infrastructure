@@ -43,10 +43,12 @@ filtered {f -> is_invalidating_function(f)}
 }
 
 
-rule only_invalidating_functions_can_change_validityTimestamp(method f) 
-filtered {f -> !f.isView && 
+rule only_invalidating_functions_can_change_validityTimestamp(method f)
+filtered {f -> !f.isView &&
         // ignore CrossChainForwarder.enableBridgeAdapters() because CrossChainForwarder is out of scope
-        f.selector != sig:enableBridgeAdapters(ICrossChainForwarder.ForwarderBridgeAdapterConfigInput[]).selector 
+        f.selector != sig:enableBridgeAdapters(ICrossChainForwarder.ForwarderBridgeAdapterConfigInput[]).selector &&
+        // ignore CrossChainForwarder.configBridgeAdapters() because CrossChainForwarder is out of scope
+        f.selector != sig:configBridgeAdapters(ICrossChainForwarder.BridgeAdapterConfig[]).selector
         }
 {
   env e;

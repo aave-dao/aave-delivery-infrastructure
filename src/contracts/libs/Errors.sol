@@ -53,4 +53,8 @@ library Errors {
   string public constant CL_GAS_PRICE_ORACLE_CANT_BE_ADDRESS_0 = '44'; // ChainLink gas price oracle can not be address 0
   string public constant CALLER_NOT_LINEA_MESSAGE_SERVICE = '45'; // caller must be the Linea message service
   string public constant LINEA_MESSAGE_SERVICE_CANT_BE_ADDRESS_0 = '46'; // Linea message service can not be address 0
+  string public constant CONFIGURABLE_ADAPTER_NOT_REGISTERED = '47'; // configurable adapter must be a registered forwarder adapter
+  string public constant ADAPTER_CONFIG_FAILED = '48'; // adapter configuration delegatecall failed
+  string public constant CALLER_NOT_CC_OWNER = '49'; // caller must be the CrossChainController owner
+  string public constant INVALID_ADAPTER_CONFIG = '50'; // adapter configuration payload is invalid
 }
