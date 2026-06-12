@@ -14,7 +14,7 @@ library PolygonAdapterDeploymentHelper {
   function getAdapterCode(
     PolygonAdapterArgs memory polArgs,
     uint256 chainId
-  ) internal view returns (bytes memory) {
+  ) internal pure returns (bytes memory) {
     bytes memory creationCode;
     // For now we dont have polygon testnets as we only have goerli implemented which should no longer be suported
     if (chainId == ChainIds.ETHEREUM) {

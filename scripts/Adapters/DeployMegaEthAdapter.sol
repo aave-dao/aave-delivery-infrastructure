@@ -16,7 +16,7 @@ library MegaEthAdapterDeploymentHelper {
 
   function getAdapterCode(
     MegaEthAdapterArgs memory megaEthArgs
-  ) internal view returns (bytes memory) {
+  ) internal pure returns (bytes memory) {
     bytes memory creationCode = type(MegaEthAdapter).creationCode;
 
     return

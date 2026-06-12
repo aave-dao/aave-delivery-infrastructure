@@ -14,7 +14,7 @@ library WormholeAdapterDeploymentHelper {
 
   function getAdapterCode(
     WormholeAdapterArgs memory wormholeArgs
-  ) internal view returns (bytes memory) {
+  ) internal pure returns (bytes memory) {
     bytes memory creationCode = wormholeArgs.baseArgs.isTestnet
       ? type(WormholeAdapterTestnet).creationCode
       : type(WormholeAdapter).creationCode;

@@ -6,7 +6,7 @@ import {CrossChainController, ICrossChainController} from '../../src/contracts/C
 import {CrossChainControllerWithEmergencyMode, ICrossChainControllerWithEmergencyMode} from '../../src/contracts/CrossChainControllerWithEmergencyMode.sol';
 
 library CCCImplDeploymentHelper {
-  function getCCCImplCode(address emergencyOracle) internal view returns (bytes memory) {
+  function getCCCImplCode(address emergencyOracle) internal pure returns (bytes memory) {
     bytes memory cccImplCode = emergencyOracle == address(0)
       ? abi.encodePacked(type(CrossChainController).creationCode, abi.encode())
       : abi.encodePacked(

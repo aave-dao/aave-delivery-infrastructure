@@ -12,7 +12,7 @@ library XLayerAdapterDeploymentHelper {
 
   function getAdapterCode(
     XLayerAdapterArgs memory xLayerArgs
-  ) internal view returns (bytes memory) {
+  ) internal pure returns (bytes memory) {
     bytes memory creationCode = type(XLayerAdapter).creationCode;
 
     return

@@ -12,7 +12,7 @@ library SoneiumAdapterDeploymentHelper {
 
   function getAdapterCode(
     SoneiumAdapterArgs memory soneiumArgs
-  ) internal view returns (bytes memory) {
+  ) internal pure returns (bytes memory) {
     bytes memory creationCode = type(SoneiumAdapter).creationCode;
 
     return

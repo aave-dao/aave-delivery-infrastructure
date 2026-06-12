@@ -11,7 +11,7 @@ library LineaAdapterDeploymentHelper {
     address lineaMessageService;
   }
 
-  function getAdapterCode(LineaAdapterArgs memory lineaArgs) internal view returns (bytes memory) {
+  function getAdapterCode(LineaAdapterArgs memory lineaArgs) internal pure returns (bytes memory) {
     bytes memory creationCode = lineaArgs.baseArgs.isTestnet
       ? type(LineaAdapterTestnet).creationCode
       : type(LineaAdapter).creationCode;

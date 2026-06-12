@@ -10,7 +10,7 @@ library HLAdapterDeploymentHelper {
     address mailBox;
   }
 
-  function getAdapterCode(HLAdapterArgs memory hlArgs) internal view returns (bytes memory) {
+  function getAdapterCode(HLAdapterArgs memory hlArgs) internal pure returns (bytes memory) {
     bytes memory creationCode = type(HyperLaneAdapter).creationCode;
 
     return

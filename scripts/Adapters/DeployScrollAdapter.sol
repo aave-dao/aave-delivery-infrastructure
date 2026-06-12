@@ -13,7 +13,7 @@ library ScrollAdapterDeploymentHelper {
 
   function getAdapterCode(
     ScrollAdapterArgs memory scrollArgs
-  ) internal view returns (bytes memory) {
+  ) internal pure returns (bytes memory) {
     bytes memory creationCode = scrollArgs.baseArgs.isTestnet
       ? type(ScrollAdapterTestnet).creationCode
       : type(ScrollAdapter).creationCode;
