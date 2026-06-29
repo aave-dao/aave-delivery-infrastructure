@@ -73,7 +73,7 @@ abstract contract BaseAdapter is IBaseAdapter {
    * @param _payload bytes containing the bridged message
    * @param originChainId id of the chain where the message originated
    */
-  function _registerReceivedMessage(bytes calldata _payload, uint256 originChainId) internal {
+  function _registerReceivedMessage(bytes memory _payload, uint256 originChainId) internal {
     // this method should be always called via call
     require(address(this) == _selfAddress, Errors.DELEGATE_CALL_FORBIDDEN);
     CROSS_CHAIN_CONTROLLER.receiveCrossChainMessage(_payload, originChainId);
