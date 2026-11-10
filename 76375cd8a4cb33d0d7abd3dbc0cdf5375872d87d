@@ -1,0 +1,16 @@
+.github/workflows/comment.yml
+  h_739c25e72c37fb 12,20
+.github/workflows/main.yml
+  h_739c25e72c37fb 12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "76375cd8a4cb33d0d7abd3dbc0cdf5375872d87d",
+  "prompts": {},
+  "humans": {
+    "h_739c25e72c37fb": {
+      "author": "DhairyaSethi <55102840+DhairyaSethi@users.noreply.github.com>"
+    }
+  }
+}
