@@ -1,0 +1,21 @@
+tests/adapters/CCIPAdapter.t.sol
+  s_f854dc51e6804c::t_e96f602c732acf 67-71
+src/contracts/adapters/ccip/CCIPAdapter.sol
+  s_f854dc51e6804c::t_e96f602c732acf 146-147,172-173
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4fbf946266752f74eee294b4c9bf42fb1ac2f177",
+  "prompts": {},
+  "sessions": {
+    "s_f854dc51e6804c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "487a67bc-5574-40f6-a15c-846cbb490158",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "DhairyaSethi <55102840+DhairyaSethi@users.noreply.github.com>"
+    }
+  }
+}
