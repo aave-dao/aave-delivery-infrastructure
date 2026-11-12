@@ -49,6 +49,7 @@ celo="${RPC_CELO}"
 celo-testnet="${RPC_CELO_ALFAJORES}"
 zksync="${RPC_ZK_SYNC}"
 zksync-testnet="${RPC_ZK_SYNC_TESTNET}"
+arc="${RPC_ARC}"
 
 [etherscan]
 ethereum={key="${ETHERSCAN_API_KEY_MAINNET}", chain=1 }
