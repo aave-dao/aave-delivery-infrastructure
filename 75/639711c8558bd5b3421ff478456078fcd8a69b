@@ -1,0 +1,23 @@
+foundry.toml
+  s_ccf9f7a5ab8908::t_6e3d64bc9e5075 53
+foundry.lock
+  s_ccf9f7a5ab8908::t_67f0f0c93669b1 3
+lib/solidity-utils
+  s_ccf9f7a5ab8908::t_ddb6bddf279b88 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "75639711c8558bd5b3421ff478456078fcd8a69b",
+  "prompts": {},
+  "sessions": {
+    "s_ccf9f7a5ab8908": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a619c55d-6a19-4ea7-9f51-a4b6867ce725",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "AlbertoCentonze <11707683+AlbertoCentonze@users.noreply.github.com>"
+    }
+  }
+}
