@@ -9,8 +9,8 @@
    -------
    - We add virtual to the function _bridgeTransaction inorder to overload it in the
      harness. There we gather a lot of usefull data about sent TX.
-   - We commented the delegate calls is 2 places: in _enableBridgeAdapters and in 
-     _bridgeTransaction.
+   - We commented the delegate calls in 3 places: in _enableBridgeAdapters,
+     _configBridgeAdapters, and in _bridgeTransaction.
    ============================================================================*/
 
 

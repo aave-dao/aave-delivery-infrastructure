@@ -7,6 +7,11 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: write
+  pull-requests: write
+  actions: read
+
 jobs:
   test:
     uses: aave-dao/github-workflows/.github/workflows/foundry-test.yml@main

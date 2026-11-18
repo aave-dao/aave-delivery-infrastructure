@@ -14,6 +14,7 @@ import {ChainIds} from 'solidity-utils/contracts/utils/ChainHelpers.sol';
 import {Errors} from '../src/contracts/libs/Errors.sol';
 import {Transaction, EncodedTransaction, Envelope} from '../src/contracts/libs/EncodingUtils.sol';
 import {BaseTest} from './BaseTest.sol';
+import {ConfigurableAdapterMock, RevertingConfigurableAdapterMock} from './mocks/ConfigurableAdapterMock.sol';
 
 contract CrossChainForwarderTest is BaseTest {
   address public constant OWNER = address(65536 + 123);
@@ -48,6 +49,12 @@ contract CrossChainForwarderTest is BaseTest {
   );
   event OptimalBandwidthUpdated(uint256 indexed chainId, uint256 optimalBandwidth);
   event EnvelopeRegistered(bytes32 indexed envelopeId, Envelope envelope);
+  event BridgeAdapterConfigured(
+    uint256 indexed destinationChainId,
+    address indexed bridgeAdapter,
+    bytes data
+  );
+  event ConfigCalled(uint256 remoteChainId, bytes data, address sender);
 
   function setUp() public {
     address[] memory sendersToApprove = new address[](1);
@@ -434,6 +441,117 @@ contract CrossChainForwarderTest is BaseTest {
     vm.expectRevert(bytes(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, address(this))));
     
     crossChainForwarder.disableBridgeAdapters(bridgeAdaptersToDisable);
+  }
+
+  function testConfigBridgeAdaptersWhenNotOwner() public {
+    ICrossChainForwarder.BridgeAdapterConfig[]
+      memory configs = new ICrossChainForwarder.BridgeAdapterConfig[](0);
+    vm.expectRevert(
+      bytes(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, address(this)))
+    );
+
+    crossChainForwarder.configBridgeAdapters(configs);
+  }
+
+  function testConfigBridgeAdaptersWhenNotRegistered() public {
+    ConfigurableAdapterMock unregistered = new ConfigurableAdapterMock(
+      address(crossChainForwarder),
+      new IBaseAdapter.TrustedRemotesConfig[](0)
+    );
+
+    ICrossChainForwarder.BridgeAdapterConfig[]
+      memory configs = new ICrossChainForwarder.BridgeAdapterConfig[](1);
+    configs[0] = ICrossChainForwarder.BridgeAdapterConfig({
+      destinationChainId: ChainIds.POLYGON,
+      bridgeAdapter: address(unregistered),
+      data: abi.encode(uint256(1))
+    });
+
+    hoax(OWNER);
+    vm.expectRevert(bytes(Errors.CONFIGURABLE_ADAPTER_NOT_REGISTERED));
+    crossChainForwarder.configBridgeAdapters(configs);
+  }
+
+  function testConfigBridgeAdaptersWhenAdapterReverts() public {
+    RevertingConfigurableAdapterMock reverting = new RevertingConfigurableAdapterMock(
+      address(crossChainForwarder),
+      new IBaseAdapter.TrustedRemotesConfig[](0)
+    );
+
+    ICrossChainForwarder.ForwarderBridgeAdapterConfigInput[]
+      memory toEnable = new ICrossChainForwarder.ForwarderBridgeAdapterConfigInput[](1);
+    toEnable[0] = ICrossChainForwarder.ForwarderBridgeAdapterConfigInput({
+      currentChainBridgeAdapter: address(reverting),
+      destinationBridgeAdapter: DESTINATION_BRIDGE_ADAPTER,
+      destinationChainId: ChainIds.POLYGON
+    });
+    hoax(OWNER);
+    crossChainForwarder.enableBridgeAdapters(toEnable);
+
+    ICrossChainForwarder.BridgeAdapterConfig[]
+      memory configs = new ICrossChainForwarder.BridgeAdapterConfig[](1);
+    configs[0] = ICrossChainForwarder.BridgeAdapterConfig({
+      destinationChainId: ChainIds.POLYGON,
+      bridgeAdapter: address(reverting),
+      data: abi.encode(uint256(1))
+    });
+
+    hoax(OWNER);
+    vm.expectRevert(bytes(Errors.ADAPTER_CONFIG_FAILED));
+    crossChainForwarder.configBridgeAdapters(configs);
+  }
+
+  function testConfigBridgeAdapters() public {
+    ConfigurableAdapterMock newAdapterA = new ConfigurableAdapterMock(
+      address(crossChainForwarder),
+      new IBaseAdapter.TrustedRemotesConfig[](0)
+    );
+    ConfigurableAdapterMock newAdapterB = new ConfigurableAdapterMock(
+      address(crossChainForwarder),
+      new IBaseAdapter.TrustedRemotesConfig[](0)
+    );
+
+    ICrossChainForwarder.ForwarderBridgeAdapterConfigInput[]
+      memory toEnable = new ICrossChainForwarder.ForwarderBridgeAdapterConfigInput[](2);
+    toEnable[0] = ICrossChainForwarder.ForwarderBridgeAdapterConfigInput({
+      currentChainBridgeAdapter: address(newAdapterA),
+      destinationBridgeAdapter: DESTINATION_BRIDGE_ADAPTER,
+      destinationChainId: ChainIds.POLYGON
+    });
+    toEnable[1] = ICrossChainForwarder.ForwarderBridgeAdapterConfigInput({
+      currentChainBridgeAdapter: address(newAdapterB),
+      destinationBridgeAdapter: DESTINATION_BRIDGE_ADAPTER,
+      destinationChainId: ChainIds.AVALANCHE
+    });
+    hoax(OWNER);
+    crossChainForwarder.enableBridgeAdapters(toEnable);
+
+    bytes memory dataA = abi.encode(address(0xBEEF), uint256(7));
+    bytes memory dataB = abi.encode(address(0xC0DE));
+
+    ICrossChainForwarder.BridgeAdapterConfig[]
+      memory configs = new ICrossChainForwarder.BridgeAdapterConfig[](2);
+    configs[0] = ICrossChainForwarder.BridgeAdapterConfig({
+      destinationChainId: ChainIds.POLYGON,
+      bridgeAdapter: address(newAdapterA),
+      data: dataA
+    });
+    configs[1] = ICrossChainForwarder.BridgeAdapterConfig({
+      destinationChainId: ChainIds.AVALANCHE,
+      bridgeAdapter: address(newAdapterB),
+      data: dataB
+    });
+
+    hoax(OWNER);
+    vm.expectEmit(true, true, true, true);
+    emit ConfigCalled(ChainIds.POLYGON, dataA, OWNER);
+    vm.expectEmit(true, true, true, true);
+    emit BridgeAdapterConfigured(ChainIds.POLYGON, address(newAdapterA), dataA);
+    vm.expectEmit(true, true, true, true);
+    emit ConfigCalled(ChainIds.AVALANCHE, dataB, OWNER);
+    vm.expectEmit(true, true, true, true);
+    emit BridgeAdapterConfigured(ChainIds.AVALANCHE, address(newAdapterB), dataB);
+    crossChainForwarder.configBridgeAdapters(configs);
   }
 
   // TEST FORWARDING MESSAGES

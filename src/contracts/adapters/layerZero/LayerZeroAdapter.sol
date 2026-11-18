@@ -3,6 +3,7 @@ pragma solidity ^0.8.8;
 
 import {ILayerZeroReceiver} from './interfaces/ILayerZeroReceiver.sol';
 import {MessagingParams, Origin, MessagingFee, MessagingReceipt} from './interfaces/ILayerZeroEndpointV2.sol';
+import {IERC5313 as IOwnable} from 'openzeppelin-contracts/contracts/interfaces/IERC5313.sol';
 import {SafeCast} from 'openzeppelin-contracts/contracts/utils/math/SafeCast.sol';
 import {OptionsBuilder} from './libs/OptionsBuilder.sol';
 import {BaseAdapter, IBaseAdapter} from '../BaseAdapter.sol';
@@ -20,6 +21,15 @@ import {Errors} from '../../libs/Errors.sol';
 contract LayerZeroAdapter is BaseAdapter, ILayerZeroAdapter, ILayerZeroReceiver {
   /// @inheritdoc ILayerZeroAdapter
   ILayerZeroEndpointV2 public immutable LZ_ENDPOINT;
+
+  /// @notice modifier to check that caller is the CrossChainController owner
+  modifier onlyCCCOwner() {
+    require(
+      msg.sender == IOwnable(address(CROSS_CHAIN_CONTROLLER)).owner(),
+      Errors.CALLER_NOT_CC_OWNER
+    );
+    _;
+  }
 
   /// @notice modifier to check that caller is LayerZero endpoint
   modifier onlyLZEndpoint() {
@@ -69,6 +79,19 @@ contract LayerZeroAdapter is BaseAdapter, ILayerZeroAdapter, ILayerZeroReceiver 
     uint256 originChainId = nativeToInfraChainId(origin.srcEid);
     address srcAddress = address(uint160(uint256(origin.sender)));
     return _trustedRemotes[originChainId] == srcAddress && srcAddress != address(0);
+  }
+
+  /// @notice Sets the LayerZero delegate for the current OApp execution context.
+  /// @dev Call through `CrossChainForwarder.configBridgeAdapters` to set the CCC OApp delegate,
+  ///      and call the adapter directly to set this adapter OApp delegate. In both cases,
+  ///      the call should be made from the CCC owner. The `remoteChainId` parameter is ignored:
+  ///      the LayerZero delegate is global to the OApp, not scoped per remote chain.
+  /// @param data ABI-encoded delegate address: `abi.encode(delegate)`.
+  function config(uint256, bytes calldata data) external override onlyCCCOwner {
+    address delegate = abi.decode(data, (address));
+    require(delegate != address(0), Errors.INVALID_ADAPTER_CONFIG);
+
+    LZ_ENDPOINT.setDelegate(delegate);
   }
 
   /// @inheritdoc IBaseAdapter

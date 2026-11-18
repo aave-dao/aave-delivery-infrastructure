@@ -6,6 +6,7 @@ import {Address} from './old-oz/Address.sol';
 
 import {ICrossChainForwarder} from './interfaces/ICrossChainForwarder.sol';
 import {IBaseAdapter} from './adapters/IBaseAdapter.sol';
+import {IConfigurableAdapter} from './adapters/interfaces/IConfigurableAdapter.sol';
 import {Transaction, EncodedTransaction, Envelope, EncodedEnvelope, TransactionUtils} from './libs/EncodingUtils.sol';
 import {Errors} from './libs/Errors.sol';
 import {Utils} from './libs/Utils.sol';
@@ -278,6 +279,13 @@ contract CrossChainForwarder is OwnableWithGuardian, ICrossChainForwarder {
   }
 
   /// @inheritdoc ICrossChainForwarder
+  function configBridgeAdapters(
+    BridgeAdapterConfig[] memory bridgeAdapterConfigs
+  ) external onlyOwner {
+    _configBridgeAdapters(bridgeAdapterConfigs);
+  }
+
+  /// @inheritdoc ICrossChainForwarder
   function updateOptimalBandwidthByChain(
     OptimalBandwidthByChain[] memory optimalBandwidthByChain
   ) external onlyOwner {
@@ -474,6 +482,44 @@ contract CrossChainForwarder is OwnableWithGuardian, ICrossChainForwarder {
           }
         }
       }
+    }
+  }
+
+  /**
+   * @notice method to configure registered bridge adapters via a delegatecall to each adapter's
+   *         `IConfigurableAdapter.config` hook
+   * @param bridgeAdapterConfigs array of bridge adapter configurations to apply
+   */
+  function _configBridgeAdapters(BridgeAdapterConfig[] memory bridgeAdapterConfigs) internal {
+    for (uint256 i = 0; i < bridgeAdapterConfigs.length; i++) {
+      BridgeAdapterConfig memory bridgeAdapterConfig = bridgeAdapterConfigs[i];
+      ChainIdBridgeConfig[] storage bridgeAdapters = _bridgeAdaptersByChain[
+        bridgeAdapterConfig.destinationChainId
+      ];
+      bool adapterRegistered;
+      for (uint256 j = 0; j < bridgeAdapters.length; j++) {
+        if (bridgeAdapters[j].currentChainBridgeAdapter == bridgeAdapterConfig.bridgeAdapter) {
+          adapterRegistered = true;
+          break;
+        }
+      }
+      require(adapterRegistered, Errors.CONFIGURABLE_ADAPTER_NOT_REGISTERED);
+
+      Address.functionDelegateCall(
+        bridgeAdapterConfig.bridgeAdapter,
+        abi.encodeWithSelector(
+          IConfigurableAdapter.config.selector,
+          bridgeAdapterConfig.destinationChainId,
+          bridgeAdapterConfig.data
+        ),
+        Errors.ADAPTER_CONFIG_FAILED
+      );
+
+      emit BridgeAdapterConfigured(
+        bridgeAdapterConfig.destinationChainId,
+        bridgeAdapterConfig.bridgeAdapter,
+        bridgeAdapterConfig.data
+      );
     }
   }
 
