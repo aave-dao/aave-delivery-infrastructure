@@ -206,6 +206,8 @@ contract WormholeExecutorAdapter is BaseAdapter, IWormholeExecutorAdapter, IVaaV
       return ChainIds.PLASMA;
     } else if (nativeChainId == 64) {
       return ChainIds.MEGAETH;
+    } else if (nativeChainId == 68) {
+      return ChainIds.TEMPO;
     } else {
       return 0;
     }
@@ -249,6 +251,8 @@ contract WormholeExecutorAdapter is BaseAdapter, IWormholeExecutorAdapter, IVaaV
       return 58;
     } else if (infraChainId == ChainIds.MEGAETH) {
       return 64;
+    } else if (infraChainId == ChainIds.TEMPO) {
+      return 68;
     } else {
       return 0;
     }
