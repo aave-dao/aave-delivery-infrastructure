@@ -1,0 +1,25 @@
+src/contracts/adapters/ccip/CCIPAdapter.sol
+  s_e439bf27f4a770::t_b0d8185006a253 148-149,176-177
+tests/adapters/CCIPAdapter.t.sol
+  s_e439bf27f4a770::t_3c4fdc7537aa8d 72-76
+tests/adapters/WormholeExecutorAdapter.t.sol
+  s_e439bf27f4a770::t_3c4fdc7537aa8d 149-153
+src/contracts/adapters/wormhole/WormholeExecutorAdapter.sol
+  s_e439bf27f4a770::t_b0d8185006a253 209-210,254-255
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c82c22dc7599ed8a3fc652daf24e8a22abd3b1e0",
+  "prompts": {},
+  "sessions": {
+    "s_e439bf27f4a770": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "79cdfe35-a49b-4c15-b084-28489516d97f",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "AlbertoCentonze <11707683+AlbertoCentonze@users.noreply.github.com>"
+    }
+  }
+}
