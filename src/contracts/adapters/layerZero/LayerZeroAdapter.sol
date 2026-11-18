@@ -33,15 +33,18 @@ contract LayerZeroAdapter is BaseAdapter, ILayerZeroAdapter, ILayerZeroReceiver 
    * @param lzEndpoint address of the layer zero endpoint on the current chain where adapter is deployed
    * @param providerGasLimit base gas limit used by the bridge adapter
    * @param trustedRemotes array of objects with chain id and origin addresses which will be allowed to send messages to this adapter
+   * @param delegate address of the LayerZero delegate. Delegate can set configs
    */
   constructor(
     address crossChainController,
     address lzEndpoint,
     uint256 providerGasLimit,
-    TrustedRemotesConfig[] memory trustedRemotes
+    TrustedRemotesConfig[] memory trustedRemotes,
+    address delegate
   ) BaseAdapter(crossChainController, providerGasLimit, 'LayerZero adapter', trustedRemotes) {
     require(lzEndpoint != address(0), Errors.INVALID_LZ_ENDPOINT);
     LZ_ENDPOINT = ILayerZeroEndpointV2(lzEndpoint);
+    LZ_ENDPOINT.setDelegate(delegate);
   }
 
   /// @inheritdoc ILayerZeroReceiver
