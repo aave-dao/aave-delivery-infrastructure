@@ -64,6 +64,16 @@ contract CCIPAdapterTest is Test {
     assertEq(ccipAdapter.infraToNativeChainId(ChainIds.POLYGON), uint64(4051577828743386545));
   }
 
+  function testGnosisChainIdMapping() public {
+    assertEq(ccipAdapter.nativeToInfraChainId(uint64(465200170687744372)), ChainIds.GNOSIS);
+    assertEq(ccipAdapter.infraToNativeChainId(ChainIds.GNOSIS), uint64(465200170687744372));
+  }
+
+  function testTempoChainIdMapping() public {
+    assertEq(ccipAdapter.nativeToInfraChainId(uint64(7281642695469137430)), ChainIds.TEMPO);
+    assertEq(ccipAdapter.infraToNativeChainId(ChainIds.TEMPO), uint64(7281642695469137430));
+  }
+
   function testForwardMessage() public {
     uint40 payloadId = uint40(0);
     bytes memory message = abi.encode(payloadId, CROSS_CHAIN_CONTROLLER);
