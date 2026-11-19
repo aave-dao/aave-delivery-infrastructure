@@ -146,6 +146,11 @@ contract WormholeExecutorAdapterTest is BaseAdapterTest {
     assertEq(adapter.infraToNativeChainId(99), 0);
   }
 
+  function test_tempoChainIdMapping() public view {
+    assertEq(adapter.nativeToInfraChainId(68), ChainIds.TEMPO);
+    assertEq(adapter.infraToNativeChainId(ChainIds.TEMPO), 68);
+  }
+
   // -------------------------------------------------------------------------
   // forwardMessage
   // -------------------------------------------------------------------------
